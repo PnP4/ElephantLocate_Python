@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import time, os
+import socket
+import sys
+
 
 ## For simplicity's sake, we'll create a strings and filenames for our paths
 ADC_PATH= os.path.normpath('/proc/')
@@ -15,38 +18,6 @@ adcFiles = []
 pwmFiles = []
 pwmMaxFiles = []
 
-## create an empty array to store the maximum value for each channel of PWM
-pwmMaxVal = []
-
-## Populate the arrays with paths that we can use later.
-#for i in range(0,6):
- # adcFiles.append(os.path.join(ADC_PATH, ADC_FILENAME+str(i)))
-  #pwmFiles.append(os.path.join(PWM_PATH, PWM_DIR+str(i), PWM_FILENAME))
-  #pwmMaxFiles.append(os.path.join(PWM_PATH, PWM_DIR+str(i), PWM_MAX))
-
-## Now, let's scan the PWM directories and pull out the values we should use
-##   for the maximum PWM level.
-#for file in pwmMaxFiles:
-  #fd = open(file, 'r')
- # pwmMaxVal.append(int(fd.read(16)))
-  #fd.close()
-
-## Let's dim some LEDs! The method for controlling a PWM pin on the pcDuino is
-##   to send to the command interpreter (via os.system() this command:
-##   echo <value> > /sys/class/leds/pwmX/brightness
-##   where <value> varies from 0 to the maximum value found in the
-##   max_brightness file, and X can be from 0-5.
-#for file in pwmFiles:
- # j = pwmFiles.index(file)  ## extract the PWM limit for this LED
-  #for i in range (0,pwmMaxVal[j]):
-   # os.system("echo " + str(i) + " >" + file)
-   # time.sleep(.01)
-  #os.system("echo 0 >" + file)
-
-## Reading ADC values is a little more straightforward than PWM- it's just
-##   classic OS file reads. Note that the value that comes out of the file is
-##   a string, so you'll need to format it with int() if you want to do math
-##   with that value later on!
 adcFiles.append(os.path.join(ADC_PATH, ADC_FILENAME+str(3)))
 def coldata(amnt):
 	data=[]
@@ -55,9 +26,24 @@ def coldata(amnt):
 		fd = open(file, 'r')
 		fd.seek(0)
 		#print "ADC Channel: " + str(adcFiles.index(file)) + " Result: " + fd.read(16)
-		data.append(fd.read(16))
+		data.append(fd.read(16).split(":")[1])
 		fd.close()
 		amnt=amnt-1
 	return data
 
 print coldata(10)
+
+# Create a TCP/IP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Connect the socket to the port where the server is listening
+server_address = ('192.168.1.2', 8091)
+print >>sys.stderr, 'connecting to %s port %s' % server_address
+sock.connect(server_address)
+while (1):
+	try:
+		senddata=coldata(10)
+		sock.sendall(senddata)
+	finally:
+		print >> sys.stderr, 'closing socket'
+		sock.close()
