@@ -28,11 +28,8 @@ while True:
    # start data collection
    while True:
        data = c.recv(1024*1024)
-       # port and strip line endings
-       #dic = json.loads(data.decode('utf8'))[0]
-       #print len(dic)
-
-       ymin = float(min(ydata)) - 10
+       print data
+       '''ymin = float(min(ydata)) - 10
        ymax = float(max(ydata)) + 10
        plt.ylim([ymin, ymax])
        ydata.append(data)
@@ -40,5 +37,5 @@ while True:
        line.set_xdata(np.arange(len(ydata)))
        line.set_ydata(ydata)  # update the data
        plt.draw()  # update the plot
-
+        '''
 

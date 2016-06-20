@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import json
 import time, os
 import socket
 import sys
@@ -43,6 +43,7 @@ sock.connect(server_address)
 while (1):
 	try:
 		senddata=coldata(10)
+		datas = str(json.dumps(senddata))
 		sock.sendall(senddata)
 	finally:
 		print >> sys.stderr, 'closing socket'
