@@ -2,4 +2,4 @@ from flask import Flask
 
 app = Flask(__name__)
 
-from app import tasks, alert_gen
+from app import tasks, checkForElephant

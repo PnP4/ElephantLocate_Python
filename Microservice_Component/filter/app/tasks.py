@@ -1,31 +1,34 @@
 from flask import jsonify, abort, make_response
 from flask import request
 from flask import url_for
-import requests
-import json
 
 from app import app
-from app import filter_bus_data
+from app import frequencyfilter
 
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def root():
-    #url = "http://localhost:5003/index"
-    filter_bus_data.senddata()
-    #return json.dumps(datasend)
-    #r = requests.post(url, data=json.dumps(datasend))
-    return "done"
+    try:
+        frequencyfilter.filter(request.json)
+        return "sdfsdf"
+    except Exception, e:
+        print e
 
 
-@app.route('/index')
+@app.route('/index', methods=['POST'])
 def index():
-    return "This is index function and we can attach htmls file"
+    #return jsonify(request.json)
+    #return "ddd"
+    # print request.json
+    #print request.json
+    frequencyfilter.filter(request.json)
+    return "sdfsdf"
 
 
 # this is for project
-@app.route('/tasks/gen', methods = ['GET'])
+@app.route('/tasks/filter', methods = ['GET'])
 def gen():
-    return signalgenerator_with_shift.gen()
+    return frequencyfilter.filter()
 
 
 # these are for additionally

@@ -5,13 +5,13 @@ import requests
 import json
 
 from app import app
-from app import over_speed
+from app import checkForElephant
 
 
 @app.route('/', methods=['POST'])
 def root():
     #url = "http://localhost:5003/index"
-    over_speed.sendalert(request.json)
+    checkForElephant.check(request.json)
     #return json.dumps(datasend)
     #r = requests.post(url, data=json.dumps(datasend))
     return "done"

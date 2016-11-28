@@ -5,13 +5,13 @@ import requests
 import json
 
 from app import app
-from app import filter_bus_data
+from app import signal_shift_calculator
 
 
 @app.route('/', methods=['POST'])
 def root():
     #url = "http://localhost:5003/index"
-    filter_bus_data.senddata(request.json)
+    signal_shift_calculator.calculator(request.json)
     #return json.dumps(datasend)
     #r = requests.post(url, data=json.dumps(datasend))
     return "done"
@@ -23,9 +23,9 @@ def index():
 
 
 # this is for project
-@app.route('/tasks/gen', methods = ['GET'])
+'''@app.route('/tasks/gen', methods = ['GET'])
 def gen():
-    return signalgenerator_with_shift.gen()
+    #return signalgenerator_with_shift.gen()'''
 
 
 # these are for additionally

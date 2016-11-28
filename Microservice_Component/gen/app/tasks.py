@@ -5,13 +5,12 @@ import requests
 import json
 
 from app import app
-from app import over_waiting
+from app import signalgenerator_with_shift
 
-
-@app.route('/', methods=['POST'])
+@app.route('/')
 def root():
     #url = "http://localhost:5003/index"
-    over_waiting.sendalert(request.json)
+    signalgenerator_with_shift.gen()
     #return json.dumps(datasend)
     #r = requests.post(url, data=json.dumps(datasend))
     return "done"
