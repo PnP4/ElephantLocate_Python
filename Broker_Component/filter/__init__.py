@@ -4,7 +4,7 @@ from scipy.fftpack import fft
 import numpy as np
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(
-        host='localhost'))
+        host='192.168.1.7'))
 channel = connection.channel()
 
 channel.queue_declare(queue='frequencyfilter')
